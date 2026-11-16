@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#101311" />
+  <title>Media Downloader</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">M</div>
+        <div><strong>Media Downloader</strong><span>DESKTOP EDITION</span></div>
+      </div>
+      <div class="top-actions">
+        <span class="local-pill"><i></i> LOCAL APP</span>
+        <button id="themeButton" class="icon-button" title="Toggle theme" aria-label="Toggle theme">☼</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="eyebrow">A SIMPLE MEDIA WORKFLOW</div>
+      <h1>Bring your media<br><em>into one place.</em></h1>
+      <p>Analyze a supported media link, choose an output, and process it locally.</p>
+    </section>
+
+    <section class="workspace">
+      <div class="input-card">
+        <label for="urlInput">MEDIA URL</label>
+        <div class="url-row">
+          <input id="urlInput" type="url" placeholder="Paste a YouTube video or Shorts URL…" autocomplete="off" spellcheck="false" />
+          <button id="analyzeButton" class="primary-button">Analyze <span>↗</span></button>
+        </div>
+        <div class="input-foot"><span>Supports standard video and Shorts URL formats</span><span id="connectionStatus">Checking desktop backend…</span></div>
+      </div>
+
+      <section id="resultCard" class="result-card hidden" aria-live="polite">
+        <div class="result-icon">▶</div>
+        <div class="result-copy">
+          <strong id="resultTitle">Analysis</strong>
+          <p id="resultMessage"></p>
+        </div>
+      </section>
+
+      <div class="format-panel">
+        <div class="panel-heading"><div><span class="eyebrow">OUTPUT</span><h2>Choose your format</h2></div><span class="muted">FORMAT OPTIONS</span></div>
+        <div class="format-options">
+          <button class="format-option selected" data-format="mp4"><span class="format-symbol">▣</span><span><b>MP4</b><small>Video file</small></span><span class="radio"></span></button>
+          <button class="format-option" data-format="mp3"><span class="format-symbol">♫</span><span><b>MP3</b><small>Audio file</small></span><span class="radio"></span></button>
+        </div>
+        <div class="quality-row">
+          <div><label for="qualitySelect">QUALITY</label><select id="qualitySelect" disabled><option>Analyze a source first</option></select></div>
+          <div class="quality-note">Available qualities will come from the connected source adapter. No qualities are fabricated.</div>
+        </div>
+        <button id="processButton" class="download-button" disabled>Start processing <span>→</span></button>
+        <p class="legal-note">Only process media you own or are authorized to download. This starter does not bypass DRM, sign-in requirements, or platform restrictions.</p>
+      </div>
+    </section>
+    <footer><span>MEDIA DOWNLOADER <b>0.1.0</b></span><span>BUILT WITH RUST + TAURI</span></footer>
+  </main>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
