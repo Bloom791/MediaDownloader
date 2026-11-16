@@ -27,6 +27,7 @@
   },
   "bundle": {
     "active": true,
+    "icon": ["icons/icon.ico"],
     "targets": ["nsis", "msi"],
     "shortDescription": "Local media processing utility",
     "category": "Utility"
