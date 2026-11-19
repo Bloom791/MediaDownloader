@@ -52,10 +52,16 @@ The installer/bundle output is placed under `src-tauri/target/release/bundle/` (
 - [x] Tauri desktop shell
 - [x] URL-shape validation, including Shorts
 - [x] Native FFmpeg/FFprobe availability check
-- [x] Safe local FFmpeg argument construction example
-- [ ] Authorized source adapter and real format discovery
-- [ ] Real processing jobs, cancellation, and progress
-- [ ] Download history and native save dialog
+- [x] FFmpeg integration and media processing
+- [x] Authorized source adapter and real format discovery
+- [x] Actual MP4 video downloads
+- [x] MP3 audio extraction and downloads
+- [x] Download progress reporting
+- [x] Native folder selection and customizable save destination
+- [x] Automatic download folder organization
+- [ ] Download history
+- [ ] Download cancellation
 - [ ] Installer testing on a clean Windows machine
+      
 
 No feature should be described as working until it has been implemented and tested.
