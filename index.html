@@ -54,6 +54,26 @@
           <div><label for="qualitySelect">QUALITY</label><select id="qualitySelect" disabled><option>Analyze a source first</option></select></div>
           <div class="quality-note">Available qualities will come from the connected source adapter. No qualities are fabricated.</div>
         </div>
+        <div class="destination-row">
+          <div class="destination-info">
+            <label for="destinationPath">SAVE LOCATION</label>
+            <div id="destinationPath" class="destination-path">Loading Downloads folder…</div>
+          </div>
+          <button id="chooseFolderButton" class="folder-button" type="button">Choose folder</button>
+        </div>
+        <section id="downloadProgress" class="download-progress hidden" aria-live="polite">
+          <div class="progress-heading">
+            <strong id="progressStatus">Preparing download…</strong>
+            <span id="progressPercent">0%</span>
+          </div>
+          <div class="progress-track">
+            <div id="progressBar" class="progress-bar"></div>
+          </div>
+          <div class="progress-details">
+            <span id="progressSpeed">Waiting for data…</span>
+            <span id="progressEta"></span>
+          </div>
+        </section>
         <button id="processButton" class="download-button" disabled>Start processing <span>→</span></button>
         <p class="legal-note">Only process media you own or are authorized to download. This starter does not bypass DRM, sign-in requirements, or platform restrictions.</p>
       </div>
