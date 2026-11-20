@@ -7,7 +7,8 @@ use std::process::Stdio;
 use std::time::Duration;
 use tokio::process::Command;
 use tokio::io::{AsyncBufReadExt, BufReader};
-use tauri::{AppHandle, Emitter};
+use tauri::path::BaseDirectory;
+use tauri::{AppHandle, Emitter, Manager};
 use url::Url;
 
 #[derive(Serialize)]
@@ -56,17 +57,29 @@ struct YtDlpFormat {
     fps: Option<f64>,
 }
 
+fn resolve_tool(app: &AppHandle, name: &str) -> Option<PathBuf> {
+    let resource_path = format!("binaries/{name}.exe");
+
+    if let Ok(path) = app.path().resolve(resource_path, BaseDirectory::Resource) {
+        if path.is_file() {
+            return Some(path);
+        }
+    }
+
+    which::which(name).ok()
+}
+
 #[tauri::command]
-async fn check_media_tools() -> MediaToolsStatus {
+async fn check_media_tools(app: AppHandle) -> MediaToolsStatus {
     MediaToolsStatus {
-        ffmpeg: which::which("ffmpeg").is_ok(),
-        ffprobe: which::which("ffprobe").is_ok(),
-        yt_dlp: which::which("yt-dlp").is_ok(),
+        ffmpeg: resolve_tool(&app, "ffmpeg").is_some(),
+        ffprobe: resolve_tool(&app, "ffprobe").is_some(),
+        yt_dlp: resolve_tool(&app, "yt-dlp").is_some(),
     }
 }
 
 #[tauri::command]
-async fn analyze_source(url: String) -> Result<AnalyzedSource, String> {
+async fn analyze_source(app: AppHandle, url: String) -> Result<AnalyzedSource, String> {
     let parsed = Url::parse(&url)
         .map_err(|_| "Please enter a valid URL.".to_string())?;
 
@@ -114,7 +127,10 @@ async fn analyze_source(url: String) -> Result<AnalyzedSource, String> {
 
     let canonical_url = format!("https://www.youtube.com/watch?v={video_id}");
 
-    let mut command = Command::new("yt-dlp");
+    let yt_dlp = resolve_tool(&app, "yt-dlp")
+        .ok_or_else(|| "yt-dlp could not be found.".to_string())?;
+
+    let mut command = Command::new(yt_dlp);
     command
         .args([
             "--dump-single-json",
@@ -132,7 +148,7 @@ async fn analyze_source(url: String) -> Result<AnalyzedSource, String> {
     .await
     .map_err(|_| "Analysis timed out. Please try again.".to_string())?
     .map_err(|error| {
-        format!("Could not start yt-dlp. Make sure it is installed and available on PATH. Details: {error}")
+        format!("Could not start yt-dlp. Details: {error}")
     })?;
 
     if !output.status.success() {
@@ -297,15 +313,19 @@ async fn download_media(
         audios_dir
     };
 
-    if which::which("yt-dlp").is_err() {
-        return Err("yt-dlp could not be found.".into());
-    }
+    let yt_dlp = resolve_tool(&app, "yt-dlp")
+        .ok_or_else(|| "yt-dlp could not be found.".to_string())?;
 
-    if which::which("ffmpeg").is_err() {
-        return Err("FFmpeg is required but could not be found.".into());
-    }
+    let ffmpeg = resolve_tool(&app, "ffmpeg")
+        .ok_or_else(|| "FFmpeg is required but could not be found.".to_string())?;
 
-    let mut command = Command::new("yt-dlp");
+    let ffmpeg_dir = ffmpeg
+        .parent()
+        .ok_or_else(|| "Could not determine the FFmpeg directory.".to_string())?
+        .to_path_buf();
+
+    let mut command = Command::new(yt_dlp);
+    command.arg("--ffmpeg-location").arg(ffmpeg_dir);
 
     command
         .arg("--no-playlist")
@@ -421,12 +441,15 @@ fn valid_video_id(value: &str) -> bool {
 }
 
 #[allow(dead_code)]
-async fn probe_local_file(path: &Path) -> Result<String, String> {
+async fn probe_local_file(app: &AppHandle, path: &Path) -> Result<String, String> {
     if !path.is_file() {
         return Err("Input file does not exist.".into());
     }
 
-    let output = tokio::process::Command::new("ffprobe")
+    let ffprobe = resolve_tool(app, "ffprobe")
+        .ok_or_else(|| "FFprobe could not be found.".to_string())?;
+
+    let output = tokio::process::Command::new(ffprobe)
         .args(["-v", "error", "-show_format", "-of", "json"])
         .arg(path)
         .output()

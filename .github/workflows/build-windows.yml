@@ -27,6 +27,43 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci
 
+      - name: Download bundled media tools
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+
+          $toolsDir = "src-tauri/binaries"
+          New-Item -ItemType Directory -Force $toolsDir | Out-Null
+
+          Write-Host "Downloading yt-dlp..."
+          Invoke-WebRequest `
+            -Uri "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe" `
+            -OutFile "$toolsDir/yt-dlp.exe"
+
+          Write-Host "Downloading FFmpeg essentials..."
+          $archive = "$env:RUNNER_TEMP/ffmpeg-essentials.zip"
+          $extract = "$env:RUNNER_TEMP/ffmpeg-essentials"
+
+          Invoke-WebRequest `
+            -Uri "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip" `
+            -OutFile $archive
+
+          Expand-Archive -Path $archive -DestinationPath $extract -Force
+
+          $ffmpeg = Get-ChildItem $extract -Filter "ffmpeg.exe" -Recurse |
+            Select-Object -First 1
+          $ffprobe = Get-ChildItem $extract -Filter "ffprobe.exe" -Recurse |
+            Select-Object -First 1
+
+          if (-not $ffmpeg -or -not $ffprobe) {
+            throw "FFmpeg or FFprobe was not found in the downloaded archive."
+          }
+
+          Copy-Item $ffmpeg.FullName "$toolsDir/ffmpeg.exe" -Force
+          Copy-Item $ffprobe.FullName "$toolsDir/ffprobe.exe" -Force
+
+          Get-ChildItem $toolsDir
+
       - name: Build Tauri application
         uses: tauri-apps/tauri-action@v1
         env:

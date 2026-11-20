@@ -27,8 +27,18 @@
   },
   "bundle": {
     "active": true,
-    "icon": ["icons/icon.ico"],
-    "targets": ["nsis", "msi"],
+    "icon": [
+      "icons/icon.ico"
+    ],
+    "targets": [
+      "nsis",
+      "msi"
+    ],
+    "resources": [
+      "binaries/yt-dlp.exe",
+      "binaries/ffmpeg.exe",
+      "binaries/ffprobe.exe"
+    ],
     "shortDescription": "Local media processing utility",
     "category": "Utility"
   }

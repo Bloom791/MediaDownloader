@@ -22,3 +22,9 @@ desktop.ini
 
 # Editor settings
 .vscode/
+
+# Locally downloaded bundled media tools
+src-tauri/binaries/
+
+# Tauri generated schemas
+src-tauri/gen/
