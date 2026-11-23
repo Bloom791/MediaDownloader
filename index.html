@@ -3,83 +3,68 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#101311" />
-  <title>Media Downloader</title>
+  <meta name="theme-color" content="#202020" />
+  <meta name="description" content="MediaDownloader desktop application" />
+  <title>MediaDownloader — 0.2.0</title>
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-  <main class="app-shell">
-    <header class="topbar">
-      <div class="brand">
-        <div class="brand-mark">M</div>
-        <div><strong>Media Downloader</strong><span>DESKTOP EDITION</span></div>
-      </div>
-      <div class="top-actions">
-        <span class="local-pill"><i></i> LOCAL APP</span>
-        <button id="themeButton" class="icon-button" title="Toggle theme" aria-label="Toggle theme">☼</button>
-      </div>
+  <div class="app-frame">
+    <header class="titlebar">
+      <div class="titlebar-brand"><span class="app-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v11m0 0 4-4m-4 4-4-4M5 17v3h14v-3"/></svg></span><strong>MediaDownloader</strong><span class="titlebar-divider"></span><span class="titlebar-context" id="breadcrumbCurrent">New download</span></div>
+      <div class="titlebar-actions"><span class="local-badge"><i></i> Local</span><button class="round-icon-button" id="themeButton" type="button" title="Toggle appearance" aria-label="Toggle appearance"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg></button></div>
     </header>
 
-    <section class="hero">
-      <div class="eyebrow">A SIMPLE MEDIA WORKFLOW</div>
-      <h1>Bring your media<br><em>into one place.</em></h1>
-      <p>Analyze a supported media link, choose an output, and process it locally.</p>
-    </section>
+    <div class="app-body">
+      <aside class="sidebar">
+        <div class="sidebar-caption">LIBRARY</div>
+        <nav class="primary-nav" aria-label="Main navigation">
+          <button class="nav-item active" data-page="download" type="button"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 18v3h16v-3"/></svg><span>New download</span></button>
+          <button class="nav-item" data-page="activity" type="button"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.34-5.66L4 8.7"/><path d="M4 4v4.7h4.7M12 7v5l3 2"/></svg><span>Activity</span></button>
+        </nav>
+        <div class="sidebar-rule"></div>
+        <div class="sidebar-caption">APPLICATION</div>
+        <button class="nav-item" data-page="settings" type="button"><svg viewBox="0 0 24 24"><path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"/><path d="m19.4 15 .1.1 1.2.9-1.2 2.1-1.4-.6a8 8 0 0 1-1.7 1l-.2 1.5h-2.4l-.3-1.5a8 8 0 0 1-1.8-1l-1.3.6-1.2-2.1 1.2-.9a7 7 0 0 1 0-2l-1.2-.9 1.2-2.1 1.3.6a8 8 0 0 1 1.8-1l.3-1.5h2.4l.2 1.5a8 8 0 0 1 1.7 1l1.4-.6 1.2 2.1-1.2.9a7 7 0 0 1-.1 2Z" transform="translate(-1 -1) scale(.96)"/></svg><span>Settings</span></button>
+        <div class="sidebar-bottom"><span class="status-indicator" id="sidebarStatusDot"></span><div><strong id="sidebarStatusTitle">Checking tools</strong><small id="sidebarStatusText">Connecting to local engine</small></div></div>
+        <div class="sidebar-version">VERSION 0.2.0</div>
+      </aside>
 
-    <section class="workspace">
-      <div class="input-card">
-        <label for="urlInput">MEDIA URL</label>
-        <div class="url-row">
-          <input id="urlInput" type="url" placeholder="Paste a YouTube video or Shorts URL…" autocomplete="off" spellcheck="false" />
-          <button id="analyzeButton" class="primary-button">Analyze <span>↗</span></button>
-        </div>
-        <div class="input-foot"><span>Supports standard video and Shorts URL formats</span><span id="connectionStatus">Checking desktop backend…</span></div>
-      </div>
+      <main class="main-panel">
+        <section class="page-view active" id="downloadPage" data-view="download">
+          <div class="page-heading"><div><div class="breadcrumb-small">WORKSPACE <span>›</span> DOWNLOAD</div><h1>New download</h1><p>Enter a media link to inspect available formats.</p></div></div>
+          <div class="workspace-column">
+            <section class="work-section source-section">
+              <div class="section-heading"><span class="section-number">1</span><div><h2>Source</h2><p>Paste a supported video link.</p></div></div>
+              <label class="field-label" for="urlInput">Media URL</label>
+              <div class="url-control"><svg viewBox="0 0 24 24"><path d="M10 13.5a4 4 0 0 0 5.66 0l3-3A4 4 0 0 0 13 4.84l-1.72 1.72"/><path d="M14 10.5a4 4 0 0 0-5.66 0l-3 3A4 4 0 0 0 11 19.16l1.72-1.72"/></svg><input id="urlInput" type="url" placeholder="https://www.youtube.com/watch?v=..." autocomplete="off" spellcheck="false"/><button id="analyzeButton" class="button button-primary" type="button">Analyze</button></div>
+              <div class="field-hint-row"><span>Currently supports YouTube videos and Shorts.</span><span id="connectionStatus" class="connection-status">Checking desktop tools…</span></div>
+              <section id="resultCard" class="source-result hidden" aria-live="polite"><div class="result-thumb-wrap" id="resultThumbWrap"><div class="result-thumb-placeholder">▶</div></div><div class="result-main"><div class="result-kicker" id="resultKicker">SOURCE ANALYZED</div><strong id="resultTitle">Media title</strong><p id="resultMessage"></p></div><span class="result-check" id="resultCheck">✓</span></section>
+            </section>
 
-      <section id="resultCard" class="result-card hidden" aria-live="polite">
-        <div class="result-icon">▶</div>
-        <div class="result-copy">
-          <strong id="resultTitle">Analysis</strong>
-          <p id="resultMessage"></p>
-        </div>
-      </section>
+            <section class="work-section output-section">
+              <div class="section-heading"><span class="section-number">2</span><div><h2>Output</h2><p>Choose the file type and quality.</p></div></div>
+              <div class="format-grid"><button class="format-option selected" data-format="mp4" type="button" aria-pressed="true"><span class="format-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m10 9 5 3-5 3z"/></svg></span><span class="format-copy"><strong>MP4 video</strong><small>Video with audio</small></span><span class="format-radio"></span></button><button class="format-option" data-format="mp3" type="button" aria-pressed="false"><span class="format-icon"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span><span class="format-copy"><strong>MP3 audio</strong><small>Audio extraction</small></span><span class="format-radio"></span></button></div>
+              <div class="quality-row" id="qualityField"><div><label class="field-label" for="qualitySelect">Video quality</label><select id="qualitySelect" disabled><option value="">Analyze a source first</option></select></div><p id="qualityNote">Available resolutions are retrieved from the source during analysis.</p></div>
+            </section>
 
-      <div class="format-panel">
-        <div class="panel-heading"><div><span class="eyebrow">OUTPUT</span><h2>Choose your format</h2></div><span class="muted">FORMAT OPTIONS</span></div>
-        <div class="format-options">
-          <button class="format-option selected" data-format="mp4"><span class="format-symbol">▣</span><span><b>MP4</b><small>Video file</small></span><span class="radio"></span></button>
-          <button class="format-option" data-format="mp3"><span class="format-symbol">♫</span><span><b>MP3</b><small>Audio file</small></span><span class="radio"></span></button>
-        </div>
-        <div class="quality-row">
-          <div><label for="qualitySelect">QUALITY</label><select id="qualitySelect" disabled><option>Analyze a source first</option></select></div>
-          <div class="quality-note">Available qualities will come from the connected source adapter. No qualities are fabricated.</div>
-        </div>
-        <div class="destination-row">
-          <div class="destination-info">
-            <label for="destinationPath">SAVE LOCATION</label>
-            <div id="destinationPath" class="destination-path">Loading Downloads folder…</div>
-          </div>
-          <button id="chooseFolderButton" class="folder-button" type="button">Choose folder</button>
-        </div>
-        <section id="downloadProgress" class="download-progress hidden" aria-live="polite">
-          <div class="progress-heading">
-            <strong id="progressStatus">Preparing download…</strong>
-            <span id="progressPercent">0%</span>
-          </div>
-          <div class="progress-track">
-            <div id="progressBar" class="progress-bar"></div>
-          </div>
-          <div class="progress-details">
-            <span id="progressSpeed">Waiting for data…</span>
-            <span id="progressEta"></span>
+            <section class="work-section destination-section">
+              <div class="section-heading"><span class="section-number">3</span><div><h2>Save location</h2><p>Choose where downloaded files are stored.</p></div></div>
+              <div class="destination-control"><svg viewBox="0 0 24 24"><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6H10l2 2h7.5A1.5 1.5 0 0 1 21 9.5v8a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5z"/></svg><div class="destination-copy"><small>DOWNLOAD FOLDER</small><strong id="destinationPath">Loading Videos folder…</strong></div><button id="chooseFolderButton" class="button button-secondary" type="button">Browse…</button></div>
+            </section>
+
+            <section id="downloadProgress" class="progress-panel hidden" aria-live="polite"><div class="progress-title-row"><div><span class="section-kicker">DOWNLOAD STATUS</span><strong id="progressStatus">Preparing download…</strong></div><span id="progressPercent" class="progress-percent">0%</span></div><div class="progress-track"><div id="progressBar" class="progress-fill"></div></div><div class="progress-meta"><span id="progressSpeed">Waiting for data…</span><span id="progressEta"></span></div></section>
+            <div class="action-row"><p class="legal-note">Only download media you own or are authorized to use.</p><button id="processButton" class="button button-download" type="button" disabled><span>Download</span><svg viewBox="0 0 24 24"><path d="M12 4v12m0 0 4-4m-4 4-4-4M5 19h14"/></svg></button></div>
           </div>
         </section>
-        <button id="processButton" class="download-button" disabled>Start processing <span>→</span></button>
-        <p class="legal-note">Only process media you own or are authorized to download. This starter does not bypass DRM, sign-in requirements, or platform restrictions.</p>
-      </div>
-    </section>
-    <footer><span>MEDIA DOWNLOADER <b>0.1.0</b></span><span>BUILT WITH RUST + TAURI</span></footer>
-  </main>
+
+        <section class="page-view" id="activityPage" data-view="activity"><div class="page-heading"><div><div class="breadcrumb-small">LIBRARY <span>›</span> ACTIVITY</div><h1>Activity</h1><p>Downloads completed during this app session.</p></div><span class="session-count" id="activityCount">0 ITEMS</span></div><section class="activity-panel"><div id="activityList" class="activity-list"><div class="empty-state"><strong>No downloads yet</strong><p>Completed downloads from this session will appear here.</p><button class="button button-secondary" data-go-download type="button">Start a download</button></div></div></section><p class="activity-disclaimer">Activity is cleared when the application closes. Persistent download history is not implemented.</p></section>
+
+        <section class="page-view" id="settingsPage" data-view="settings"><div class="page-heading"><div><div class="breadcrumb-small">APPLICATION <span>›</span> PREFERENCES</div><h1>Settings</h1><p>Manage application preferences and local tools.</p></div></div><div class="settings-list"><section class="settings-panel"><div class="settings-heading"><div><h2>Default save location</h2><p>Parent folder used for new downloads.</p></div><button id="settingsChooseFolderButton" class="button button-secondary" type="button">Change…</button></div><div class="setting-path" id="settingsDestination">Loading…</div></section><section class="settings-panel"><div class="settings-heading"><div><h2>Appearance</h2><p>Choose the application theme.</p></div><button id="settingsThemeButton" class="button button-secondary" type="button">Use light theme</button></div></section><section class="settings-panel"><div class="settings-heading"><div><h2>Media tools</h2><p>Required components for analyzing and processing media.</p></div><span class="tool-health" id="systemPulse"></span></div><div class="tool-list"><div><span>yt-dlp</span><strong id="ytDlpStatus" class="tool-state pending">Checking</strong></div><div><span>FFmpeg</span><strong id="ffmpegStatus" class="tool-state pending">Checking</strong></div><div><span>FFprobe</span><strong id="ffprobeStatus" class="tool-state pending">Checking</strong></div></div></section><section class="settings-panel about-panel"><div><h2>MediaDownloader</h2><p>Version 0.2.0 · Tauri 2 · Local processing</p></div></section></div></section>
+
+        <footer class="statusbar"><span><i class="status-indicator" id="systemStatusDot"></i><span id="statusbarText">Connecting to local tools…</span></span><span>MediaDownloader 0.2.0</span></footer>
+      </main>
+    </div>
+  </div>
   <script type="module" src="/app.js"></script>
 </body>
 </html>

@@ -1,0 +1,15 @@
+MediaDownloader v0.2.0 — Native Windows UI overhaul
+
+Replace these three files in the root of your existing MediaDownloader project:
+  index.html
+  styles.css
+  app.js
+
+Do not replace or delete src-tauri, Cargo.toml, Cargo.lock, binaries, or your existing Tauri configuration.
+The Rust download engine and Tauri command contracts are unchanged.
+
+After copying the files, from the project root run:
+  npm run build
+  npm run tauri dev
+
+The Activity list remains session-only, matching the existing implementation.
